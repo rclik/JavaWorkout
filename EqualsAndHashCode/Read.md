@@ -19,12 +19,12 @@ Yani **== operand** i ile iki object karsilastiriliyor. Bir diger deyisle **refe
 
 ### Reference Equality
 
-**Reference equality**, adi uzerinde, object reference larini karsilastirarak iki object in ayni olup olmadigina karar verir. Iki object in reference i ayni olmasi ne demek? Bunu icin biraz daha java bilgilerimizi karistirmamiz gerekiyor. 
+**Reference equality**, adi uzerinde, object reference larini karsilastirarak iki object in ayni olup olmadigina karar verir. Iki object in reference i ayni olmasi ne demek? Bunu icin biraz daha java bilgilerimizi karistirmamiz gerekiyor.
 
 Java da bir object olusturuldugunda o object icin *heap* da bir alan allocate edilir ve alana ulasabilmek icin bir *reference* olusuturulur. Iste bu reference bizim bahsettigimiz **reference** dir. Yani **reference equality** nin sonucunu true olmasi ancak ve ancak iki object in heap deki ayni alanin reference i olmasi gerekiyor.
 
 ```java
-    Person person = new Person("james");
+Person person = new Person("james");
 ```
 Yukardaki ornekte `person` object i olusturduk, `new` operand i kullanildiginda heap de bir alan allocate edildi, person degiskenine de bu alanin *reference* ini tutmasi icin gorevlendirildi.
 
@@ -109,14 +109,14 @@ public final void defaultHashCodeAndEquals_objectHashCodeAndObjectReference_isNo
 (Overrride edilmis bir method yokken) iyi ayni class property lerine sahip ayri iki object object birbirlerine esit midir? - hayir, cunku equals override edilmemisse, reference equality sine bakiliyordur.
 
 ```java
-    @Test
-    public final void defaultHashCodeAndEquals_sameObjectsWithSameProperty_isEqual(){
-        Person anthony = new Employee("Anthony", 2L);
-        Person anthonyTheSecond = new Employee("Anthony", 2L);
+@Test
+public final void defaultHashCodeAndEquals_sameObjectsWithSameProperty_isEqual(){
+    Person anthony = new Employee("Anthony", 2L);
+    Person anthonyTheSecond = new Employee("Anthony", 2L);
 
-        Assert.AssertFalse(anthony.equals(anthonyTheSecond));
-        Assert.AssertFalse(anthony == anthonyTheSecond);
-    }
+    Assert.AssertFalse(anthony.equals(anthonyTheSecond));
+    Assert.AssertFalse(anthony == anthonyTheSecond);
+}
 ```
 
 #### Soru-3
@@ -124,15 +124,15 @@ public final void defaultHashCodeAndEquals_objectHashCodeAndObjectReference_isNo
 (Overrride edilmis bir method yokken) bir object in reference ini yeni bir reference tipi ile alip, reference tipi uzerinden object i guncellersek, yeni object ile eski object ayni olur mu? - Evet, cunku bu sekilde yeni reference tipi de ayni object i gosterecek. Hatta guncelleme de ayni object uzerinde olacak.
 
 ```java
-    @Test
-    public final void defaultHashCodeAndEquals_oneObjectPropertyChanged_equal(){
-        Person anthony = new Employee("Anthony", 2L);
-        Employee edited = anthony;
-        edited.setName("henry");
+@Test
+public final void defaultHashCodeAndEquals_oneObjectPropertyChanged_equal(){
+    Person anthony = new Employee("Anthony", 2L);
+    Employee edited = anthony;
+    edited.setName("henry");
 
-        Assert.assertEquals(edited, anthony);
-        Assert.assertEquals("henry", anthony.getName());
-    }
+    Assert.assertEquals(edited, anthony);
+    Assert.assertEquals("henry", anthony.getName());
+}
 ```
 
 ---
@@ -230,7 +230,7 @@ public final void hashSetImpl_overriddenHashCodeAndEquals_hashCodeInSystemAndOve
 
 Hashed data structure olan HashSet ile hasCode ve equals method u override edilmeyen bir test yapalim;
 
-```JAVA
+```java
 @Test
 public final void hashSetImpl_defaultHashCodeAndEquals_hashSetImplementation_test(){
     Employee emp1 = new Employee("jamie", 1L);
@@ -270,38 +270,38 @@ public final void hashSetImpl_defaultHashCodeAndEquals_hashSetImplementation_tes
 Hashed data structure olan HashSet ile sadece equals method u override edilen bir test yapalim;
 
 ```java
-    @Test
-    public final void hashSetImpl_defaultHashCodeAndOverriddenEquals_hashSetImplementation_test(){
-        EmployeeWithEquals emp1 = new EmployeeWithEquals("jamie", 1L);
-        EmployeeWithEquals emp2 = new EmployeeWithEquals("james", 2L);
-        EmployeeWithEquals emp3 = new EmployeeWithEquals("anthony", 3L);
-        EmployeeWithEquals emp4 = new EmployeeWithEquals("thomas", 4L);
-        EmployeeWithEquals emp5 = new EmployeeWithEquals("steven", 5L);
+@Test
+public final void hashSetImpl_defaultHashCodeAndOverriddenEquals_hashSetImplementation_test(){
+    EmployeeWithEquals emp1 = new EmployeeWithEquals("jamie", 1L);
+    EmployeeWithEquals emp2 = new EmployeeWithEquals("james", 2L);
+    EmployeeWithEquals emp3 = new EmployeeWithEquals("anthony", 3L);
+    EmployeeWithEquals emp4 = new EmployeeWithEquals("thomas", 4L);
+    EmployeeWithEquals emp5 = new EmployeeWithEquals("steven", 5L);
 
-        Set<EmployeeWithEquals> employees = new HashSet<>();
-        employees.add(emp1);
-        employees.add(emp2);
-        employees.add(emp3);
-        employees.add(emp4);
-        employees.add(emp5);
+    Set<EmployeeWithEquals> employees = new HashSet<>();
+    employees.add(emp1);
+    employees.add(emp2);
+    employees.add(emp3);
+    employees.add(emp4);
+    employees.add(emp5);
 
-        // its size should be 5 since all elements are different objects (their references are different)
-        Assert.assertEquals(5, employees.size());
+    // its size should be 5 since all elements are different objects (their references are different)
+    Assert.assertEquals(5, employees.size());
 
-        // new object with same value is added to the set
-        EmployeeWithEquals emp6 = new EmployeeWithEquals("steven", 5L);
-        employees.add(emp6);
+    // new object with same value is added to the set
+    EmployeeWithEquals emp6 = new EmployeeWithEquals("steven", 5L);
+    employees.add(emp6);
 
-        // the size should be 6 since all all items hashCode are different, new bucket is created for emp6
-        Assert.assertEquals(6, employees.size());
+    // the size should be 6 since all all items hashCode are different, new bucket is created for emp6
+    Assert.assertEquals(6, employees.size());
 
-        // lets create new object with same class properties, then try to check if set contains that object or not
-        EmployeeWithEquals emp7 = new EmployeeWithEquals("steven", 5L);
-        Assert.assertEquals(employees.contains(emp7), false); // of course false, since both hashCode is different
+    // lets create new object with same class properties, then try to check if set contains that object or not
+    EmployeeWithEquals emp7 = new EmployeeWithEquals("steven", 5L);
+    Assert.assertEquals(employees.contains(emp7), false); // of course false, since both hashCode is different
 
-        // of course, we cannot remove the element which is not included on the set
-        Assert.assertEquals(employees.remove(emp7), false);
-    }
+    // of course, we cannot remove the element which is not included on the set
+    Assert.assertEquals(employees.remove(emp7), false);
+}
 ```
 
 #### Soru-9
@@ -309,40 +309,40 @@ Hashed data structure olan HashSet ile sadece equals method u override edilen bi
 Hashed data structure olan HashSet ile sadece hashCode method u override edilen bir test yapalim;
 
 ```java
-    @Test
-    public final void hashSetImpl_defaultEqualsAndOverriddenHashCode_hashSetImplementation_test(){
-        Employee emp1 = new EmployeeWithHashCode("jamie", 1L);
-        Employee emp2 = new EmployeeWithHashCode("james", 2L);
-        Employee emp3 = new EmployeeWithHashCode("anthony", 3L);
-        Employee emp4 = new EmployeeWithHashCode("thomas", 4L);
-        Employee emp5 = new EmployeeWithHashCode("steven", 5L);
+@Test
+public final void hashSetImpl_defaultEqualsAndOverriddenHashCode_hashSetImplementation_test(){
+    Employee emp1 = new EmployeeWithHashCode("jamie", 1L);
+    Employee emp2 = new EmployeeWithHashCode("james", 2L);
+    Employee emp3 = new EmployeeWithHashCode("anthony", 3L);
+    Employee emp4 = new EmployeeWithHashCode("thomas", 4L);
+    Employee emp5 = new EmployeeWithHashCode("steven", 5L);
 
-        Set<Employee> employees = new HashSet<>();
-        employees.add(emp1);
-        employees.add(emp2);
-        employees.add(emp3);
-        employees.add(emp4);
-        employees.add(emp5);
+    Set<Employee> employees = new HashSet<>();
+    employees.add(emp1);
+    employees.add(emp2);
+    employees.add(emp3);
+    employees.add(emp4);
+    employees.add(emp5);
 
-        // its size should be 5 since all elements are different objects (their references are different)
-        Assert.assertEquals(5, employees.size());
+    // its size should be 5 since all elements are different objects (their references are different)
+    Assert.assertEquals(5, employees.size());
 
-        // new object with same value is added to the set, but here hashCode is same as emp5
-        // but it is added to same bucket with emp5
-        Employee emp6 = new EmployeeWithHashCode("steven", 5L);
-        employees.add(emp6);
+    // new object with same value is added to the set, but here hashCode is same as emp5
+    // but it is added to same bucket with emp5
+    Employee emp6 = new EmployeeWithHashCode("steven", 5L);
+    employees.add(emp6);
 
-        // the size should be 6 since even emp5 and emp6 hashCodes are same because of their equals method are different
-        Assert.assertEquals(6, employees.size());
+    // the size should be 6 since even emp5 and emp6 hashCodes are same because of their equals method are different
+    Assert.assertEquals(6, employees.size());
 
-        // lets create new object with same class properties, hashCode is same with emp6 and emp5.
-        // while implementation, it finds the bucket with hashCode and uses equals to if objects are equals
-        Employee emp7 = new EmployeeWithHashCode("steven", 5L);
-        Assert.assertEquals(employees.contains(emp7), false); // of course false, because having same hashCode is not enough to make object equals
+    // lets create new object with same class properties, hashCode is same with emp6 and emp5.
+    // while implementation, it finds the bucket with hashCode and uses equals to if objects are equals
+    Employee emp7 = new EmployeeWithHashCode("steven", 5L);
+    Assert.assertEquals(employees.contains(emp7), false); // of course false, because having same hashCode is not enough to make object equals
 
-        // of course, we cannot remove the element which is not included on the set
-        Assert.assertEquals(employees.remove(emp7), false);
-    }
+    // of course, we cannot remove the element which is not included on the set
+    Assert.assertEquals(employees.remove(emp7), false);
+}
 ```
 
 #### Soru-10
@@ -350,58 +350,58 @@ Hashed data structure olan HashSet ile sadece hashCode method u override edilen 
 Hashed data structure olan HashSet ile hashCode ve equals method u override edilen bir test yapalim;
 
 ```java
-    @Test
-    public final void hashSetImpl_bothOverriddenEqualsAndHashCode_hashSetImplementation_test(){
-        Employee emp1 = new EmployeeWithEqualsAndHashCode("jamie", 1L);
-        Employee emp2 = new EmployeeWithEqualsAndHashCode("james", 2L);
-        Employee emp3 = new EmployeeWithEqualsAndHashCode("anthony", 3L);
-        Employee emp4 = new EmployeeWithEqualsAndHashCode("thomas", 4L);
-        Employee emp5 = new EmployeeWithEqualsAndHashCode("steven", 5L);
+@Test
+public final void hashSetImpl_bothOverriddenEqualsAndHashCode_hashSetImplementation_test(){
+    Employee emp1 = new EmployeeWithEqualsAndHashCode("jamie", 1L);
+    Employee emp2 = new EmployeeWithEqualsAndHashCode("james", 2L);
+    Employee emp3 = new EmployeeWithEqualsAndHashCode("anthony", 3L);
+    Employee emp4 = new EmployeeWithEqualsAndHashCode("thomas", 4L);
+    Employee emp5 = new EmployeeWithEqualsAndHashCode("steven", 5L);
 
-        Set<Employee> employees = new HashSet<>();
-        employees.add(emp1);
-        employees.add(emp2);
-        employees.add(emp3);
-        employees.add(emp4);
-        employees.add(emp5);
+    Set<Employee> employees = new HashSet<>();
+    employees.add(emp1);
+    employees.add(emp2);
+    employees.add(emp3);
+    employees.add(emp4);
+    employees.add(emp5);
 
-        // its size should be 5 since all elements are different objects (their references are different)
-        Assert.assertEquals(5, employees.size());
+    // its size should be 5 since all elements are different objects (their references are different)
+    Assert.assertEquals(5, employees.size());
 
-        // new object with same value is added to the set, but here hashCode is same as emp5 and they are equals to each other with respect to equals method
-        // so emp6 does not added to HashSet, because HashSet does not allow add new value over
-        Employee emp6 = new EmployeeWithEqualsAndHashCode("nash", 5L);
+    // new object with same value is added to the set, but here hashCode is same as emp5 and they are equals to each other with respect to equals method
+    // so emp6 does not added to HashSet, because HashSet does not allow add new value over
+    Employee emp6 = new EmployeeWithEqualsAndHashCode("nash", 5L);
 
-        boolean isAdded = employees.add(emp6);
+    boolean isAdded = employees.add(emp6);
 
-        Assert.assertFalse(isAdded);
+    Assert.assertFalse(isAdded);
 
-        // the size should be 5 since even emp5 and emp6 hashCodes are hashCode and equals method are same even their name property is not same since equals and hashCode methods are made by using id class property
-        Assert.assertEquals(5, employees.size());
+    // the size should be 5 since even emp5 and emp6 hashCodes are hashCode and equals method are same even their name property is not same since equals and hashCode methods are made by using id class property
+    Assert.assertEquals(5, employees.size());
 
-        // and value does not changed
-        Assert.assertFalse(hashSetImpl_checkIfNameExist(employees, emp6.getName()));
-        Assert.assertTrue(hashSetImpl_checkIfNameExist(employees, emp5.getName()));
+    // and value does not changed
+    Assert.assertFalse(hashSetImpl_checkIfNameExist(employees, emp6.getName()));
+    Assert.assertTrue(hashSetImpl_checkIfNameExist(employees, emp5.getName()));
 
-        // lets create new object with same class properties, hashCode is same with emp6 and emp5.
-        // while implementation, it finds the bucket with hashCode and uses equals to if objects are equals
-        Employee emp7 = new EmployeeWithEqualsAndHashCode("steven", 5L);
-        Assert.assertEquals(employees.contains(emp7), true); // of course false, because having same hashCode and equals method returns true means they are equal
+    // lets create new object with same class properties, hashCode is same with emp6 and emp5.
+    // while implementation, it finds the bucket with hashCode and uses equals to if objects are equals
+    Employee emp7 = new EmployeeWithEqualsAndHashCode("steven", 5L);
+    Assert.assertEquals(employees.contains(emp7), true); // of course false, because having same hashCode and equals method returns true means they are equal
 
-        // of course, we can remove the element which is not included on the set
-        Assert.assertEquals(employees.remove(emp7), true);
+    // of course, we can remove the element which is not included on the set
+    Assert.assertEquals(employees.remove(emp7), true);
 
-        // of course after removing the element then the size of the data structure is decreased
-        Assert.assertEquals(4, employees.size());
+    // of course after removing the element then the size of the data structure is decreased
+    Assert.assertEquals(4, employees.size());
+}
+
+private boolean hashSetImpl_checkIfNameExist(Set<Employee> employees, String name) {
+    for (Employee employee : employees) {
+        if (employee.getName().equals(name))
+            return true;
     }
-
-    private boolean hashSetImpl_checkIfNameExist(Set<Employee> employees, String name) {
-        for (Employee employee : employees) {
-            if (employee.getName().equals(name))
-                return true;
-        }
-        return false;
-    }
+    return false;
+}
 ```
 
 #### Soru-11
@@ -409,45 +409,45 @@ Hashed data structure olan HashSet ile hashCode ve equals method u override edil
 Hashed data structure olan HashMap ile hashCode ve equals method u override edilen bir test yapalim;
 
 ```java
-    @Test
-    public final void hashMapImpl_defaultHashCodeAndEquals_hashSetImplementation_test(){
-        Employee emp1 = new Employee("jamie", 1L);
-        Employee emp2 = new Employee("james", 2L);
-        Employee emp3 = new Employee("anthony", 3L);
-        Employee emp4 = new Employee("thomas", 4L);
-        Employee emp5 = new Employee("steven", 5L);
+@Test
+public final void hashMapImpl_defaultHashCodeAndEquals_hashSetImplementation_test(){
+    Employee emp1 = new Employee("jamie", 1L);
+    Employee emp2 = new Employee("james", 2L);
+    Employee emp3 = new Employee("anthony", 3L);
+    Employee emp4 = new Employee("thomas", 4L);
+    Employee emp5 = new Employee("steven", 5L);
 
-        String departmentIT = "IT";
-        String departmentHR = "HR";
+    String departmentIT = "IT";
+    String departmentHR = "HR";
 
-        Map<Employee, String> employees = new HashMap<>();
-        employees.put(emp1, departmentIT);
-        employees.put(emp2, departmentIT);
-        employees.put(emp3, departmentIT);
-        employees.put(emp4, departmentHR);
-        employees.put(emp5, departmentHR);
+    Map<Employee, String> employees = new HashMap<>();
+    employees.put(emp1, departmentIT);
+    employees.put(emp2, departmentIT);
+    employees.put(emp3, departmentIT);
+    employees.put(emp4, departmentHR);
+    employees.put(emp5, departmentHR);
 
-        // its size should be 5 since all elements are different objects (their references are different)
-        Assert.assertEquals(5, employees.size());
+    // its size should be 5 since all elements are different objects (their references are different)
+    Assert.assertEquals(5, employees.size());
 
-        // new object with same value is added to the set
-        Employee emp6 = new Employee("steven", 5L);
-        employees.put(emp6, departmentIT);
+    // new object with same value is added to the set
+    Employee emp6 = new Employee("steven", 5L);
+    employees.put(emp6, departmentIT);
 
-        // the size should be 6 since all items are different (their references are different)
-        Assert.assertEquals(6, employees.size());
+    // the size should be 6 since all items are different (their references are different)
+    Assert.assertEquals(6, employees.size());
 
-        // both values should be different since keys are different
-        Assert.assertTrue(departmentIT.equals(employees.get(emp6)));
-        Assert.assertTrue(departmentHR.equals(employees.get(emp5)));
+    // both values should be different since keys are different
+    Assert.assertTrue(departmentIT.equals(employees.get(emp6)));
+    Assert.assertTrue(departmentHR.equals(employees.get(emp5)));
 
-        // lets create new object with same class properties, then try to check if set contains that object or not
-        Employee emp7 = new Employee("steven", 5L);
-        Assert.assertNull(employees.get(emp7));
+    // lets create new object with same class properties, then try to check if set contains that object or not
+    Employee emp7 = new Employee("steven", 5L);
+    Assert.assertNull(employees.get(emp7));
 
-        // of course, we cannot remove the element which is not included on the set, it returns null
-        Assert.assertEquals(null, employees.remove(emp7));
-    }
+    // of course, we cannot remove the element which is not included on the set, it returns null
+    Assert.assertEquals(null, employees.remove(emp7));
+}
 ```
 
 #### Soru-12
@@ -455,44 +455,44 @@ Hashed data structure olan HashMap ile hashCode ve equals method u override edil
 Hashed data structure olan HashMap ile sadece equals method u override edilen bir test yapalim;
 
 ```java
-    @Test
-    public final void hashMapImpl_defaultHashCodeAndOverriddenEquals_hashSetImplementation_test(){
-        EmployeeWithEquals emp1 = new EmployeeWithEquals("jamie", 1L);
-        EmployeeWithEquals emp2 = new EmployeeWithEquals("james", 2L);
-        EmployeeWithEquals emp3 = new EmployeeWithEquals("anthony", 3L);
-        EmployeeWithEquals emp4 = new EmployeeWithEquals("thomas", 4L);
-        EmployeeWithEquals emp5 = new EmployeeWithEquals("steven", 5L);
+@Test
+public final void hashMapImpl_defaultHashCodeAndOverriddenEquals_hashSetImplementation_test(){
+    EmployeeWithEquals emp1 = new EmployeeWithEquals("jamie", 1L);
+    EmployeeWithEquals emp2 = new EmployeeWithEquals("james", 2L);
+    EmployeeWithEquals emp3 = new EmployeeWithEquals("anthony", 3L);
+    EmployeeWithEquals emp4 = new EmployeeWithEquals("thomas", 4L);
+    EmployeeWithEquals emp5 = new EmployeeWithEquals("steven", 5L);
 
-        String departmentIT = "IT";
-        String departmentHR = "HR";
+    String departmentIT = "IT";
+    String departmentHR = "HR";
 
-        Map<Employee, String> employees = new HashMap<>();
-        employees.put(emp1, departmentIT);
-        employees.put(emp2, departmentIT);
-        employees.put(emp3, departmentIT);
-        employees.put(emp4, departmentHR);
-        employees.put(emp5, departmentHR);
+    Map<Employee, String> employees = new HashMap<>();
+    employees.put(emp1, departmentIT);
+    employees.put(emp2, departmentIT);
+    employees.put(emp3, departmentIT);
+    employees.put(emp4, departmentHR);
+    employees.put(emp5, departmentHR);
 
-        // its size should be 5 since all elements are different objects (their references are different)
-        Assert.assertEquals(5, employees.size());
+    // its size should be 5 since all elements are different objects (their references are different)
+    Assert.assertEquals(5, employees.size());
 
-        // new object with same value is added to the hashMap
-        EmployeeWithEquals emp6 = new EmployeeWithEquals("steven", 5L);
-        employees.put(emp6, departmentIT);
+    // new object with same value is added to the hashMap
+    EmployeeWithEquals emp6 = new EmployeeWithEquals("steven", 5L);
+    employees.put(emp6, departmentIT);
 
-        // the size should be 6 since all items hashCode are different
-        Assert.assertEquals(6, employees.size());
+    // the size should be 6 since all items hashCode are different
+    Assert.assertEquals(6, employees.size());
 
-        Assert.assertTrue(departmentIT.equals(employees.get(emp6)));
-        Assert.assertTrue(departmentHR.equals(employees.get(emp5)));
+    Assert.assertTrue(departmentIT.equals(employees.get(emp6)));
+    Assert.assertTrue(departmentHR.equals(employees.get(emp5)));
 
-        // lets create new object with same class properties, then try to check if hashMap contains that object or not
-        EmployeeWithEquals emp7 = new EmployeeWithEquals("steven", 5L);
-        Assert.assertNull(employees.get(emp7));
+    // lets create new object with same class properties, then try to check if hashMap contains that object or not
+    EmployeeWithEquals emp7 = new EmployeeWithEquals("steven", 5L);
+    Assert.assertNull(employees.get(emp7));
 
-        // of course, we cannot remove the element which is not included on the hashMap
-        Assert.assertEquals(null, employees.remove(emp7));
-    }
+    // of course, we cannot remove the element which is not included on the hashMap
+    Assert.assertEquals(null, employees.remove(emp7));
+}
 ```
 
 #### Soru-13
@@ -500,46 +500,46 @@ Hashed data structure olan HashMap ile sadece equals method u override edilen bi
 Hashed data structure olan HashMap ile sadece hashCode method u override edilen bir test yapalim;
 
 ```java
-    @Test
-    public final void hashMapImpl_defaultEqualsAndOverriddenHashCode_hashSetImplementation_test(){
-        Employee emp1 = new EmployeeWithHashCode("jamie", 1L);
-        Employee emp2 = new EmployeeWithHashCode("james", 2L);
-        Employee emp3 = new EmployeeWithHashCode("anthony", 3L);
-        Employee emp4 = new EmployeeWithHashCode("thomas", 4L);
-        Employee emp5 = new EmployeeWithHashCode("steven", 5L);
+@Test
+public final void hashMapImpl_defaultEqualsAndOverriddenHashCode_hashSetImplementation_test(){
+    Employee emp1 = new EmployeeWithHashCode("jamie", 1L);
+    Employee emp2 = new EmployeeWithHashCode("james", 2L);
+    Employee emp3 = new EmployeeWithHashCode("anthony", 3L);
+    Employee emp4 = new EmployeeWithHashCode("thomas", 4L);
+    Employee emp5 = new EmployeeWithHashCode("steven", 5L);
 
-        String departmentIT = "IT";
-        String departmentHR = "HR";
+    String departmentIT = "IT";
+    String departmentHR = "HR";
 
-        Map<Employee, String> employees = new HashMap<>();
-        employees.put(emp1, departmentIT);
-        employees.put(emp2, departmentIT);
-        employees.put(emp3, departmentIT);
-        employees.put(emp4, departmentHR);
-        employees.put(emp5, departmentHR);
+    Map<Employee, String> employees = new HashMap<>();
+    employees.put(emp1, departmentIT);
+    employees.put(emp2, departmentIT);
+    employees.put(emp3, departmentIT);
+    employees.put(emp4, departmentHR);
+    employees.put(emp5, departmentHR);
 
-        // its size should be 5 since all elements are different objects (their references are different)
-        Assert.assertEquals(5, employees.size());
+    // its size should be 5 since all elements are different objects (their references are different)
+    Assert.assertEquals(5, employees.size());
 
-        // the size should be 6 since even emp5 and emp6 hashCodes are same because of their equals method are different
-        Assert.assertEquals(6, employees.size());
+    // the size should be 6 since even emp5 and emp6 hashCodes are same because of their equals method are different
+    Assert.assertEquals(6, employees.size());
 
-        // new object with same value is added to the set, but here hashCode is same as emp5
-        // but  it is added to same bucket with emp5
-        Employee emp6 = new EmployeeWithHashCode("nash", 5L);
-        employees.put(emp6, departmentIT);
+    // new object with same value is added to the set, but here hashCode is same as emp5
+    // but  it is added to same bucket with emp5
+    Employee emp6 = new EmployeeWithHashCode("nash", 5L);
+    employees.put(emp6, departmentIT);
 
-        Assert.assertTrue(employees.get(emp6).equals(departmentIT));
-        Assert.assertTrue(employees.get(emp5).equals(departmentHR));
+    Assert.assertTrue(employees.get(emp6).equals(departmentIT));
+    Assert.assertTrue(employees.get(emp5).equals(departmentHR));
 
-        // lets create new object with same class properties, hashCode is same with emp6 and emp5.
-        // while implementation, it finds the bucket with hashCode and uses equals to if objects are equals
-        Employee emp7 = new EmployeeWithHashCode("steven", 5L);
-        Assert.assertNull(employees.get(emp7)); // of course returns null since having same hashCode is not enough to make object equals
+    // lets create new object with same class properties, hashCode is same with emp6 and emp5.
+    // while implementation, it finds the bucket with hashCode and uses equals to if objects are equals
+    Employee emp7 = new EmployeeWithHashCode("steven", 5L);
+    Assert.assertNull(employees.get(emp7)); // of course returns null since having same hashCode is not enough to make object equals
 
-        // of course, we cannot remove the element which is not included on the set
-        Assert.assertNull(employees.remove(emp7));
-    }
+    // of course, we cannot remove the element which is not included on the set
+    Assert.assertNull(employees.remove(emp7));
+}
 ```
 
 #### Soru-14
@@ -547,58 +547,57 @@ Hashed data structure olan HashMap ile sadece hashCode method u override edilen 
 Hashed data structure olan HashMap ile hashCode ve equals method u override edilen bir test yapalim;
 
 ```java
-    @Test
-    public final void hashMapImpl_bothOverriddenEqualsAndHashCode_hashSetImplementation_test(){
-        Employee emp1 = new EmployeeWithEqualsAndHashCode("jamie", 1L);
-        Employee emp2 = new EmployeeWithEqualsAndHashCode("james", 2L);
-        Employee emp3 = new EmployeeWithEqualsAndHashCode("anthony", 3L);
-        Employee emp4 = new EmployeeWithEqualsAndHashCode("thomas", 4L);
-        Employee emp5 = new EmployeeWithEqualsAndHashCode("steven", 5L);
+@Test
+public final void hashMapImpl_bothOverriddenEqualsAndHashCode_hashSetImplementation_test(){
+    Employee emp1 = new EmployeeWithEqualsAndHashCode("jamie", 1L);
+    Employee emp2 = new EmployeeWithEqualsAndHashCode("james", 2L);
+    Employee emp3 = new EmployeeWithEqualsAndHashCode("anthony", 3L);
+    Employee emp4 = new EmployeeWithEqualsAndHashCode("thomas", 4L);
+    Employee emp5 = new EmployeeWithEqualsAndHashCode("steven", 5L);
 
-        String departmentIT = "IT";
-        String departmentHR = "HR";
+    String departmentIT = "IT";
+    String departmentHR = "HR";
 
-        Map<Employee, String> employees = new HashMap<>();
-        employees.put(emp1, departmentIT);
-        employees.put(emp2, departmentIT);
-        employees.put(emp3, departmentIT);
-        employees.put(emp4, departmentHR);
-        employees.put(emp5, departmentHR);
+    Map<Employee, String> employees = new HashMap<>();
+    employees.put(emp1, departmentIT);
+    employees.put(emp2, departmentIT);
+    employees.put(emp3, departmentIT);
+    employees.put(emp4, departmentHR);
+    employees.put(emp5, departmentHR);
 
-        // its size should be 5 since all elements are different objects (their references are different)
-        Assert.assertEquals(5, employees.size());
+    // its size should be 5 since all elements are different objects (their references are different)
+    Assert.assertEquals(5, employees.size());
 
-        // new object with same value is added to the HashMap, but here hashCode is same as emp5 and they are equals to each other with respect to equals method
-        // so emp6 added to the hashMap, and overrides its department value.
-        Employee emp6 = new EmployeeWithEqualsAndHashCode("nash", 5L);
+    // new object with same value is added to the HashMap, but here hashCode is same as emp5 and they are equals to each other with respect to equals method
+    // so emp6 added to the hashMap, and overrides its department value.
+    Employee emp6 = new EmployeeWithEqualsAndHashCode("nash", 5L);
 
-        // meanwhile HashMap s put method returns overriden value 
-        String overriddenEmployeeDepartment = employees.put(emp6, departmentIT);
-        Assert.assertTrue(overriddenEmployeeDepartment.equals(departmentHR));
+    // meanwhile HashMap s put method returns overriden value 
+    String overriddenEmployeeDepartment = employees.put(emp6, departmentIT);
+    Assert.assertTrue(overriddenEmployeeDepartment.equals(departmentHR));
 
-        // the size should be 5, since emp5 and emp6 hashCodes are hashCode and equals method are same
-        Assert.assertEquals(5, employees.size());
+    // the size should be 5, since emp5 and emp6 hashCodes are hashCode and equals method are same
+    Assert.assertEquals(5, employees.size());
 
-        // and values are changed since emp5 is overridden on the HashMap
-        Assert.assertTrue(employees.get(emp6).equals(departmentIT));
-        Assert.assertFalse(employees.get(emp6).equals(departmentHR));
+    // and values are changed since emp5 is overridden on the HashMap
+    Assert.assertTrue(employees.get(emp6).equals(departmentIT));
+    Assert.assertFalse(employees.get(emp6).equals(departmentHR));
 
-        // we can get department value by using emp5 since they are same with emp6
-        // but department value is not same with when emp5 is added to the hashMap
-        Assert.assertTrue(employees.get(emp5).equals(departmentIT));
-        Assert.assertFalse(employees.get(emp5).equals(departmentHR));
+    // we can get department value by using emp5 since they are same with emp6
+    // but department value is not same with when emp5 is added to the hashMap
+    Assert.assertTrue(employees.get(emp5).equals(departmentIT));
+    Assert.assertFalse(employees.get(emp5).equals(departmentHR));
 
-        // lets create new object with same class properties, hashCode is same with emp6 and emp5.
-        // while implementation, it finds the bucket with hashCode and uses equals to if objects are equals
-        Employee emp7 = new EmployeeWithEqualsAndHashCode("steven", 5L);
-        Assert.assertEquals(employees.get(emp7), departmentIT); // because it is the overriden value
+    // lets create new object with same class properties, hashCode is same with emp6 and emp5.
+    // while implementation, it finds the bucket with hashCode and uses equals to if objects are equals
+    Employee emp7 = new EmployeeWithEqualsAndHashCode("steven", 5L);
+    Assert.assertEquals(employees.get(emp7), departmentIT); // because it is the overriden value
 
-        // of course, we cannot remove the element which is not included on the set
-        String removedEmployeeDepartment = employees.remove(emp7);
-        Assert.assertEquals(departmentIT, removedEmployeeDepartment);
+    // of course, we cannot remove the element which is not included on the set
+    String removedEmployeeDepartment = employees.remove(emp7);
+    Assert.assertEquals(departmentIT, removedEmployeeDepartment);
 
-        // of course after removing the element then the size of the data structure is decreased
-        Assert.assertEquals(4, employees.size());
-    }
-
+    // of course after removing the element then the size of the data structure is decreased
+    Assert.assertEquals(4, employees.size());
+}
 ```
